@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+Bundler.setup
+
+require File.expand_path('../../lib/issues_checker', __FILE__)
+
+if ARGV.length != 1 
+  puts "Usage: bin/issues_checker repo_name"
+  exit(1)
+end
+
+repo = ARGV.first
+
+begin 
+  checker = IssuesChecker.new(repo)
+  checker.check
+  puts repo
+  puts "issues: #{checker.opened} open, #{checker.closed} closed"
+rescue IssuesCheckerError => e 
+  puts e.message
+end
